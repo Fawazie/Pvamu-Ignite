@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tax Document AI Tutor</title>
+  <!-- Load Poppins Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset and Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #1C1C1C;
+      color: #D4AF37;
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #1C1C1C;
+      border-right: 1px solid #D4AF37;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-header {
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-bottom: 1px solid #D4AF37;
+      color: #D4AF37;
+    }
+    .nav-links {
+      list-style: none;
+      width: 100%;
+    }
+    .nav-links li {
+      padding: 15px 20px;
+      cursor: pointer;
+      color: #D4AF37;
+      transition: background 0.2s;
+    }
+    .nav-links li:hover {
+      background-color: #2A2A2A;
+    }
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background-color: #1C1C1C;
+      padding: 20px;
+      border-bottom: 1px solid #D4AF37;
+    }
+    .topbar h1 {
+      font-size: 1.4rem;
+      margin-bottom: 5px;
+      color: #D4AF37;
+    }
+    .topbar p {
+      color: #D4AF37;
+      font-size: 0.95rem;
+    }
+    .dashboard-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    /* Big Tutor Result Board */
+    .income-board {
+      background-color: #2A2A2A;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(212, 175, 55, 0.5);
+      padding: 30px;
+      text-align: center;
+    }
+    .income-board h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #D4AF37;
+    }
+    .income-board .income-value {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #D4AF37;
+    }
+    /* Charts Row */
+    .charts-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .chart-card {
+      background-color: #2A2A2A;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(212, 175, 55, 0.5);
+      padding: 20px;
+      flex: 1;
+      min-width: 300px;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #D4AF37;
+    }
+    .chart-placeholder {
+      width: 120px;
+      height: 120px;
+      border-radius: 60px;
+      background: linear-gradient(135deg, #D4AF37 50%, #5E4B8B 50%);
+      margin-bottom: 10px;
+    }
+    /* Actions Row */
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .upload-card, .assistant-card {
+      background-color: #2A2A2A;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(212, 175, 55, 0.5);
+      padding: 20px;
+      flex: 1;
+      min-width: 300px;
+      color: #D4AF37;
+    }
+    .upload-card h2, .assistant-card h2 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .button {
+      padding: 10px 20px;
+      background: #D4AF37;
+      color: #1C1C1C;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .button:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    /* Assistant Response Display */
+    #assistantResponse {
+      margin-top: 10px;
+      background: #2A2A2A;
+      border: 1px solid #D4AF37;
+      border-radius: 4px;
+      padding: 10px;
+      min-height: 100px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      color: #D4AF37;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="sidebar">
+    <div class="sidebar-header">FindMe Tax</div>
+    <ul class="nav-links">
+      <li id="navDashboard">Dashboard</li>
+      <li id="navAiConversation">AI Conversation</li>
+      <li id="navAiTutor">AI Tutor</li>
+      <li id="navDocuments">Documents</li>
+      <li id="navSettings">Settings</li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <h1>Hello, Matilda Matias</h1>
+      <p>Here is your tax dashboard overview</p>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+      <!-- Big Tutor Result Board -->
+      <div class="income-board">
+        <h2 id="resultHeading">Tax Summary</h2>
+        <div class="income-value" id="resultValue">$XXX</div>
+      </div>
+
+      <!-- Charts Row (Optional: additional charts) -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-placeholder"></div>
+          <p>Total Spending by Category</p>
+        </div>
+        <div class="chart-card">
+          <div class="chart-placeholder" style="background: linear-gradient(135deg, #28a745 50%, #5E4B8B 50%);"></div>
+          <p>Your Income in 2023</p>
+        </div>
+      </div>
+
+      <!-- Actions Row (Upload & Voice Command) -->
+      <div class="actions-row">
+        <!-- PDF Upload Card -->
+        <div class="upload-card">
+          <h2>Import Tax Document</h2>
+          <input type="file" id="documentInput" accept="application/pdf">
+          <button type="button" id="processBtn" class="button">Process PDF</button>
+        </div>
+        
+        <!-- AI Tutor Card -->
+        <div class="assistant-card">
+          <h2 id="assistantCardHeading">Tax Tutor</h2>
+          <button type="button" id="startVoice" class="button">Start Voice Command</button>
+          <div id="assistantResponse">Awaiting instructions...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF.js Library for PDF Processing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js"></script>
+  <script>
+    /* WARNING:
+       Embedding your API keys client-side is insecure for production.
+       This demo is for testing purposes only.
+    */
+    const openaiApiKey = 'insert API key here';
+    const elevenLabsApiKey = 'insert API key here';
+    const elevenLabsVoiceId = 'insert voice ID here';
+
+    // Set current mode to "tutor" (default)
+    let currentMode = "tutor";
+
+    // Global variable for the extracted document text (hidden from UI)
+    let extractedDocumentText = "";
+
+    // Call ChatGPT API as a Tax Tutor to extract a very short summary
+    function getTaxAssistantResponse(documentText) {
+      const endpoint = "https://api.openai.com/v1/chat/completions";
+      // Updated prompt for a very short summary including key figures and possible tax breaks
+      let prompt;
+      if (currentMode === "tutor") {
+        prompt = "You are an expert tax tutor. Please review the following tax document and provide a very short summary of what it entails. " +
+                 "Include key figures and mention any possible tax breaks, deductions, or credits. Keep the summary concise and to the point.\n\n" + documentText;
+      } else {
+        prompt = "Please review the following tax document and provide a concise explanation of the most important details.\n\n" + documentText;
+      }
+      const data = {
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: currentMode === "tutor" ? "You are an expert tax tutor. Provide a very short, clear summary with key figures and tax breaks." : "You are an expert tax assistant." },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 200
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${openaiApiKey}`
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.choices && result.choices.length > 0) {
+          const tutorResponse = result.choices[0].message.content;
+          document.getElementById('assistantResponse').innerText = tutorResponse;
+          // Optionally update the result board (if needed)
+          document.getElementById('resultHeading').innerText = "Tax Summary";
+          document.getElementById('resultValue').innerText = "$XXX"; // Replace with dynamic value if available
+          elevenLabsSpeak(tutorResponse);
+        } else {
+          document.getElementById('assistantResponse').innerText = "No response received from the tax tutor.";
+        }
+      })
+      .catch(error => {
+        console.error("Error with ChatGPT API:", error);
+        document.getElementById('assistantResponse').innerText = "Error processing document explanation.";
+      });
+    }
+
+    // Use ElevenLabs API to speak the response in a premium voice
+    function elevenLabsSpeak(text) {
+      console.log("Sending text to ElevenLabs:", text);
+      fetch('https://api.elevenlabs.io/v1/text-to-speech/' + elevenLabsVoiceId, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': elevenLabsApiKey
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_monolingual_v1'
+        })
+      })
+      .then(response => {
+        console.log("ElevenLabs response status:", response.status);
+        return response.arrayBuffer();
+      })
+      .then(data => {
+        console.log("Received audio data. Length:", data.byteLength);
+        const audioBlob = new Blob([data], { type: 'audio/mpeg' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play().then(() => {
+          console.log("Audio is playing successfully.");
+        }).catch(err => {
+          console.error("Audio play error:", err);
+        });
+      })
+      .catch(error => console.error('Error with ElevenLabs TTS:', error));
+    }
+
+    // Voice Command Recognition using Web Speech API
+    let recognition;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      
+      recognition.onresult = function(event) {
+        const command = event.results[0][0].transcript;
+        document.getElementById('assistantResponse').innerText = "Voice command: " + command;
+        if (command.toLowerCase().includes("explain")) {
+          if (extractedDocumentText.length > 0) {
+            document.getElementById('assistantResponse').innerText = "Re-extracting key tax information...";
+            getTaxAssistantResponse(extractedDocumentText);
+          } else {
+            document.getElementById('assistantResponse').innerText = "No document processed yet. Please upload a PDF first.";
+          }
+        }
+      };
+      
+      recognition.onerror = function(event) {
+        console.error("Speech recognition error:", event.error);
+        document.getElementById('assistantResponse').innerText = "Error during voice recognition: " + event.error;
+      };
+    } else {
+      document.getElementById('startVoice').disabled = true;
+      document.getElementById('assistantResponse').innerText = "Voice recognition not supported in this browser.";
+    }
+
+    // Start listening for voice commands when the button is clicked
+    document.getElementById('startVoice').addEventListener('click', function() {
+      if (recognition) {
+        recognition.start();
+      }
+    });
+    
+    // Optional: Switch mode via sidebar (if needed)
+    document.getElementById("navAiTutor").addEventListener("click", function() {
+      currentMode = "tutor";
+      document.getElementById("assistantCardHeading").innerText = "Tax Tutor";
+    });
+  </script>
+</body>
+</html>
